@@ -14,7 +14,7 @@ namespace :npm do
   task :install do
     on roles fetch(:npm_roles) do
       npm_target_paths = fetch(:npm_target_path, release_path).to_a
-      npm_target_path.each do |path|
+      npm_target_paths.each do |path|
         within path do
           with fetch(:npm_env_variables, {}) do
             execute :npm, 'install', fetch(:npm_flags)
@@ -44,7 +44,7 @@ namespace :npm do
   task :prune do
     on roles fetch(:npm_roles) do
       npm_target_paths = fetch(:npm_target_path, release_path).to_a
-      npm_target_path.each do |path|
+      npm_target_paths.each do |path|
         within path do
           execute :npm, 'prune', fetch(:npm_prune_flags)
         end
@@ -63,7 +63,7 @@ namespace :npm do
   task :rebuild do
     on roles fetch(:npm_roles) do
       npm_target_paths = fetch(:npm_target_path, release_path).to_a
-      npm_target_path.each do |path|
+      npm_target_paths.each do |path|
         within path do
           with fetch(:npm_env_variables, {}) do
             execute :npm, 'rebuild'
