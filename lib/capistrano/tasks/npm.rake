@@ -13,7 +13,6 @@ namespace :npm do
     DESC
   task :install do
     on roles fetch(:npm_roles) do
-      npm_target_paths = fetch(:npm_target_path, release_path).to_a
       npm_target_paths.each do |path|
         within path do
           with fetch(:npm_env_variables, {}) do
@@ -43,7 +42,6 @@ namespace :npm do
     DESC
   task :prune do
     on roles fetch(:npm_roles) do
-      npm_target_paths = fetch(:npm_target_path, release_path).to_a
       npm_target_paths.each do |path|
         within path do
           execute :npm, 'prune', fetch(:npm_prune_flags)
@@ -62,7 +60,6 @@ namespace :npm do
     DESC
   task :rebuild do
     on roles fetch(:npm_roles) do
-      npm_target_paths = fetch(:npm_target_path, release_path).to_a
       npm_target_paths.each do |path|
         within path do
           with fetch(:npm_env_variables, {}) do
@@ -71,6 +68,12 @@ namespace :npm do
         end
       end
     end
+  end
+
+  def npm_target_paths
+    paths = fetch(:npm_target_path, release_path)
+    paths = [paths] unless paths.respond_to?(:each)
+    paths.map { |item| item.respond_to?(:call) ? item.call : item }
   end
 end
 
